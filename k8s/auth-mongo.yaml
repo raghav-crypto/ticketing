@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels: # telling the deployment that we want
+      # to define all the different pods with a label app: posts
+      app: auth-mongo
+  template: # exact conf of a pod that we want this deployment to create
+    metadata:
+      labels:
+        app: auth-mongo
+    spec:
+      containers:
+        - name: auth-mongo
+          image: mongo
+          # imagePullPolicy: Never
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-mongo-srv
+spec:
+  type: ClusterIP
+  selector: # tells the service which pods it route traffic to
+    app: auth-mongo
+  ports:
+    - name: db
+      protocol: TCP
+      port: 27017 # this can be any arbitary value. the port which service listens on
+      targetPort: 27017 # it has to match the port at which our application inside the container is listening
