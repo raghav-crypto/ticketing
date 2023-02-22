@@ -1,0 +1,32 @@
+# apiVersion: skaffold/v4beta2
+# kind: Config
+# metadata:
+#   name: ticketer
+# build:
+#   artifacts:
+#     - image: raghavajag/auth
+#       context: auth
+#       docker:
+#         dockerfile: Dockerfile
+#       sync:
+#         manual:
+#           - dest: "."
+#             src: "auth/**/*"
+# manifests:
+#   rawYaml:
+#     - k8s/auth.depl.yaml
+
+apiVersion: skaffold/v4beta2
+kind: Config
+deploy:
+  kubectl:
+    remoteManifests:
+      - "./k8s/*"
+build:
+  artifacts:
+    - image: raghavajag/auth
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        infer: ["**/*"]
