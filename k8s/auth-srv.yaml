@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-node-port
+spec:
+  type: NodePort
+  selector: # tells the service which pods it route traffic to
+    app: auth
+  ports:
+    - name: auth
+      protocol: TCP
+      port: 10000 # this can be any arbitary value. the port which service listens on
+      targetPort: 3000 # it has to match the port at which our application inside the container is listening

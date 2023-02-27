@@ -1,3 +1,4 @@
+auth/.env
 skaffold.yaml.temp
 auth/dist
 auth/node_modules

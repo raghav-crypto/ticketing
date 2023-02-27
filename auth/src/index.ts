@@ -1,3 +1,12 @@
+import { config } from 'dotenv';
+const env = process.env.NODE_ENV || 'development';
+
+if (env === 'development') {
+    config(); // Load environment variables from .env file
+} else if (env === 'test') {
+    config({ path: '.env.test' }); // Load environment variables from .env.test file
+}
+
 import express from 'express';
 import 'express-async-errors';
 import mongoose from 'mongoose';
@@ -7,9 +16,17 @@ import { signoutRouter } from './routes/signout';
 import { signupRouter } from './routes/signup';
 import { errorHandler } from './middlewares/error-handler';
 import { NotFoundError } from './errors/not-found-error';
+import cookieSession from 'cookie-session';
 
 const app = express();
+app.set('trust proxy', true);
 app.use(express.json());
+app.use(
+    cookieSession({
+        signed: false,
+        secure: true
+    })
+);
 
 app.use(currentUserRouter);
 app.use(signinRouter);
@@ -33,7 +50,7 @@ const start = async () => {
     }
 
     app.listen(3000, () => {
-        console.log('Listening on port 3000!');
+        console.log('Listening on port 3000!!!');
     });
 };
 start()
